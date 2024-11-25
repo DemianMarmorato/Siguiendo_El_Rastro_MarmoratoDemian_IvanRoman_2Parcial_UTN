@@ -1,119 +1,23 @@
 import pygame
 import random
+from config import ANCHO, ALTO, BLANCO, NEGRO
+from sprites import Jugador, Proyectil, Enemigo
 
 # Inicializar Pygame
 pygame.init()
 
 # Configuración de la pantalla
-ANCHO = 800
-ALTO = 600
 pantalla = pygame.display.set_mode((ANCHO, ALTO))
 pygame.display.set_caption("Siguiendo el Rastro")
 
-# Colores
-BLANCO = (255, 255, 255)
-NEGRO = (0, 0, 0)
-VERDE = (0, 255, 0)
-ROJO = (255, 0, 0)
 
-
-# Jugador
-class Jugador(pygame.sprite.Sprite):
-    def __init__(self):
-        super().__init__()
-        # Cargar el sprite sheet
-        sprite_sheet = pygame.image.load("sprites/jugador.png").convert_alpha()
-
-        # Definir el primer frame (x, y, ancho, alto)
-        frame_rect = pygame.Rect(
-            220, 50, 50, 50
-        )  # Cambia estos valores según el frame que quieras usar
-
-        # Crear una superficie nueva para el frame específico
-        self.image = pygame.Surface((50, 50), pygame.SRCALPHA)
-        self.image.blit(sprite_sheet, (0, 0), frame_rect)
-
-        # Escalar la imagen al tamaño deseado (por ejemplo, 150x150)
-        self.image = pygame.transform.scale(self.image, (150, 150))
-
-        # Ajustar el rectángulo de colisión al nuevo tamaño manualmente
-        self.rect = self.image.get_rect()
-        self.rect.inflate_ip(
-            -50, -50
-        )  # Ajusta los valores para reducir el área de colisión
-
-        self.rect.left = 50
-        self.rect.centery = ALTO // 2
-        self.velocidad_y = 0
-
-    def update(self):
-        self.rect.y += self.velocidad_y
-        if self.rect.top < 0:
-            self.rect.top = 0
-        if self.rect.bottom > ALTO:
-            self.rect.bottom = ALTO
-
-
-# Proyectil
-class Proyectil(pygame.sprite.Sprite):
-    def __init__(self, x, y):
-        super().__init__()
-        # Cargar la imagen del sprite del proyectil
-        self.image = pygame.image.load("sprites/proyectil.png").convert_alpha()
-
-        # Escalar la imagen del proyectil si es necesario
-        self.image = pygame.transform.scale(
-            self.image, (50, 50)
-        )  # Ajusta el tamaño según sea necesario
-
-        self.rect = self.image.get_rect()
-        self.rect.left = x
-        self.rect.centery = y
-        self.velocidad_x = 10
-
-    def update(self):
-        self.rect.x += self.velocidad_x
-        if self.rect.left > ANCHO:
-            self.kill()
-
-
-# Enemigo
-class Enemigo(pygame.sprite.Sprite):
-    def __init__(self):
-        super().__init__()
-        # Cargar las imágenes de los enemigos
-        imagenes_enemigos = [
-            pygame.image.load("sprites/enemigo1.png").convert_alpha(),
-            pygame.image.load("sprites/enemigo2.png").convert_alpha(),
-        ]
-
-        # Seleccionar aleatoriamente una imagen de enemigo
-        self.image = random.choice(imagenes_enemigos)
-
-        # Escalar la imagen del enemigo si es necesario
-        self.image = pygame.transform.scale(
-            self.image, (50, 50)
-        )  # Ajusta el tamaño según sea necesario
-
-        self.rect = self.image.get_rect()
-        self.rect.right = ANCHO
-        self.rect.y = random.randint(0, ALTO - self.rect.height)
-        self.velocidad_x = random.randint(3, 7)
-
-    def update(self):
-        self.rect.x -= self.velocidad_x
-        if self.rect.right < 0:
-            self.kill()
-
-
-# Configuración del juego
 def main():
     reloj = pygame.time.Clock()
     puntaje = 0
     fuente = pygame.font.Font(None, 36)
 
     # Cargar la imagen del fondo
-    fondo = pygame.image.load("bosque.png").convert()
+    fondo = pygame.image.load("sprites/bosque.jpg").convert()
     fondo = pygame.transform.scale(fondo, (1440, 771))  # Tamaño original de la imagen
     fondo_x1 = 0
     fondo_x2 = fondo.get_width()
@@ -181,8 +85,8 @@ def main():
 
         # Dibujar
         pantalla.fill(NEGRO)
-        pantalla.blit(fondo, (fondo_x1, 50))  # Ajustar 50 para bajar el fondo
-        pantalla.blit(fondo, (fondo_x2, 50))  # Ajustar 50 para bajar el fondo
+        pantalla.blit(fondo, (fondo_x1, -150))  # Ajustar -150 para bajar el fondo
+        pantalla.blit(fondo, (fondo_x2, -150))  # Ajustar -150 para bajar el fondo
         todos_los_sprites.draw(pantalla)
 
         # Mostrar puntaje
@@ -206,6 +110,5 @@ def main():
     pygame.quit()
 
 
-# Ejecutar el juego
 if __name__ == "__main__":
     main()
