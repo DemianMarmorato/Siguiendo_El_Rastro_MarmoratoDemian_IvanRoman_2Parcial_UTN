@@ -11,6 +11,36 @@ pantalla = pygame.display.set_mode((ANCHO, ALTO))
 pygame.display.set_caption("Siguiendo el Rastro")
 
 
+def mostrar_pantalla_game_over(pantalla, fuente, puntaje):
+    pantalla.fill(NEGRO)
+    texto_game_over = fuente.render(
+        f"Juego Terminado. Puntaje: {puntaje}", True, BLANCO
+    )
+    texto_rect = texto_game_over.get_rect(center=(ANCHO // 2, ALTO // 2 - 20))
+    pantalla.blit(texto_game_over, texto_rect)
+
+    texto_reiniciar = fuente.render(
+        "Presiona R para reiniciar la partida o ESC para salir", True, BLANCO
+    )
+    texto_rect_reiniciar = texto_reiniciar.get_rect(center=(ANCHO // 2, ALTO // 2 + 20))
+    pantalla.blit(texto_reiniciar, texto_rect_reiniciar)
+
+    pygame.display.flip()
+
+    esperando_reiniciar = True
+    while esperando_reiniciar:
+        for evento in pygame.event.get():
+            if evento.type == pygame.QUIT:
+                pygame.quit()
+                exit()
+            if evento.type == pygame.KEYDOWN:
+                if evento.key == pygame.K_r:
+                    esperando_reiniciar = False
+                if evento.key == pygame.K_ESCAPE:
+                    pygame.quit()
+                    exit()
+
+
 def main():
     reloj = pygame.time.Clock()
     puntaje = 0
@@ -50,6 +80,8 @@ def main():
                     proyectil = Proyectil(jugador.rect.right, jugador.rect.centery)
                     todos_los_sprites.add(proyectil)
                     proyectiles.add(proyectil)
+                if evento.key == pygame.K_ESCAPE:
+                    jugando = False
 
             if evento.type == pygame.KEYUP:
                 if evento.key == pygame.K_UP or evento.key == pygame.K_DOWN:
@@ -81,7 +113,9 @@ def main():
         # Colisiones jugador-enemigo
         choques = pygame.sprite.spritecollide(jugador, enemigos, False)
         if choques:
-            jugando = False
+            mostrar_pantalla_game_over(pantalla, fuente, puntaje)
+            jugando = True
+            main()
 
         # Dibujar
         pantalla.fill(NEGRO)
@@ -96,17 +130,6 @@ def main():
         pygame.display.flip()
         reloj.tick(60)
 
-    # Pantalla de fin de juego
-    pantalla.fill(NEGRO)
-    texto_game_over = fuente.render(
-        f"Juego Terminado. Puntaje: {puntaje}", True, BLANCO
-    )
-    texto_rect = texto_game_over.get_rect(center=(ANCHO // 2, ALTO // 2))
-    pantalla.blit(texto_game_over, texto_rect)
-    pygame.display.flip()
-
-    # Esperar antes de cerrar
-    pygame.time.wait(2000)
     pygame.quit()
 
 

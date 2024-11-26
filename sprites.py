@@ -36,6 +36,10 @@ class Jugador(pygame.sprite.Sprite):
             self.rect.top = 0
         if self.rect.bottom > ALTO:
             self.rect.bottom = ALTO
+        if self.rect.left < 0:
+            self.rect.left = 0
+        if self.rect.right > ANCHO:
+            self.rect.right = ANCHO
 
 
 # Proyectil
@@ -91,5 +95,11 @@ class Enemigo(pygame.sprite.Sprite):
 
     def update(self):
         self.rect.x -= self.velocidad_x
-        if self.rect.right < 0:
+        if self.rect.left < 0:
             self.kill()
+        if self.rect.right > ANCHO:
+            self.rect.right = ANCHO
+        if self.rect.top < 0:
+            self.rect.top = 0
+        if self.rect.bottom > ALTO:
+            self.rect.bottom = ALTO
