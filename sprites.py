@@ -8,7 +8,7 @@ class Jugador(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
         # Cargar el sprite sheet
-        sprite_sheet = pygame.image.load("sprites/jugador.png").convert_alpha()
+        sprite_sheet = pygame.image.load("Siguiendo_El_Rastro_MarmoratoDemian_IvanRoman_2Parcial_UTN/sprites/jugador.png").convert_alpha()
 
         # Definir el primer frame (x, y, ancho, alto)
         frame_rect = pygame.Rect(220, 50, 50, 50)
@@ -47,7 +47,7 @@ class Proyectil(pygame.sprite.Sprite):
     def __init__(self, x, y):
         super().__init__()
         # Cargar la imagen del sprite del proyectil
-        self.image = pygame.image.load("sprites/proyectil.png").convert_alpha()
+        self.image = pygame.image.load("Siguiendo_El_Rastro_MarmoratoDemian_IvanRoman_2Parcial_UTN/sprites/proyectil.png").convert_alpha()
 
         # Escalar la imagen del proyectil si es necesario
         self.image = pygame.transform.scale(
@@ -72,8 +72,8 @@ class Enemigo(pygame.sprite.Sprite):
         super().__init__()
         # Cargar las imágenes de los enemigos
         imagenes_enemigos = [
-            pygame.image.load("sprites/enemigo1.png").convert_alpha(),
-            pygame.image.load("sprites/enemigo2.png").convert_alpha(),
+            pygame.image.load("Siguiendo_El_Rastro_MarmoratoDemian_IvanRoman_2Parcial_UTN/sprites/enemigo1.png").convert_alpha(),
+            pygame.image.load("Siguiendo_El_Rastro_MarmoratoDemian_IvanRoman_2Parcial_UTN/sprites/enemigo2.png").convert_alpha(),
         ]
 
         # Seleccionar aleatoriamente una imagen de enemigo

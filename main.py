@@ -1,15 +1,20 @@
 import pygame
 import random
-from config import ANCHO, ALTO, BLANCO, NEGRO
+from config import ANCHO, ALTO, BLANCO, NEGRO, ROJO
 from sprites import Jugador, Proyectil, Enemigo
 
-# Inicializar Pygame
-pygame.init()
+# Inicializar Pygame y Mixer 
+pygame.init() 
+pygame.mixer.init() 
 
-# Configuración de la pantalla
-pantalla = pygame.display.set_mode((ANCHO, ALTO))
-pygame.display.set_caption("Siguiendo el Rastro")
+# Configuración de la pantalla 
+pantalla = pygame.display.set_mode((ANCHO, ALTO)) 
+pygame.display.set_caption("Siguiendo el Rastro") 
 
+#Cargar la música de fondo 
+pygame.mixer.music.load("Siguiendo_El_Rastro_MarmoratoDemian_IvanRoman_2Parcial_UTN/musica/temadeljuego.mp3") # Reemplaza "ruta_de_tu_musica.mp3" por el nombre de tu archivo de música 
+pygame.mixer.music.set_volume(0.5) # Opcional: Ajustar el volumen 
+pygame.mixer.music.play(-1) # -1 para que la música se repita indefinidamente
 
 def mostrar_pantalla_game_over(pantalla, fuente, puntaje):
     pantalla.fill(NEGRO)
@@ -20,7 +25,7 @@ def mostrar_pantalla_game_over(pantalla, fuente, puntaje):
     pantalla.blit(texto_game_over, texto_rect)
 
     texto_reiniciar = fuente.render(
-        "Presiona R para reiniciar la partida o ESC para salir", True, BLANCO
+        "Presiona R para reiniciar la partida o ESC para salir", True, ROJO
     )
     texto_rect_reiniciar = texto_reiniciar.get_rect(center=(ANCHO // 2, ALTO // 2 + 20))
     pantalla.blit(texto_reiniciar, texto_rect_reiniciar)
@@ -47,7 +52,7 @@ def main():
     fuente = pygame.font.Font(None, 36)
 
     # Cargar la imagen del fondo
-    fondo = pygame.image.load("sprites/bosque.jpg").convert()
+    fondo = pygame.image.load("Siguiendo_El_Rastro_MarmoratoDemian_IvanRoman_2Parcial_UTN/sprites/bosque.jpg").convert()
     fondo = pygame.transform.scale(fondo, (1440, 771))  # Tamaño original de la imagen
     fondo_x1 = 0
     fondo_x2 = fondo.get_width()
