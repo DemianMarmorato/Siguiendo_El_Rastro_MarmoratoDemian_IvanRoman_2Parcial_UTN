@@ -23,7 +23,7 @@ class Jugador(pygame.sprite.Sprite):
         # Ajustar el rectángulo de colisión al nuevo tamaño manualmente
         self.rect = self.image.get_rect()
         self.rect.inflate_ip(
-            -140, -140
+            -140, -80
         )  # Ajusta los valores para reducir el área de colisión
 
         self.rect.left = 50
@@ -81,7 +81,7 @@ class Enemigo(pygame.sprite.Sprite):
 
         # Escalar la imagen del enemigo al tamaño deseado
         self.image = pygame.transform.scale(
-            self.image, (170, 170)
+            self.image, (180, 180)
         )  # Ajusta el tamaño según sea necesario
 
         # Rotar la imagen horizontalmente para que mire hacia la izquierda
@@ -89,7 +89,7 @@ class Enemigo(pygame.sprite.Sprite):
 
         self.rect = self.image.get_rect()
         self.rect.right = ANCHO
-        self.rect.inflate_ip(-100, -50)
+        self.rect.inflate_ip(-100, -30)
         self.rect.y = random.randint(0, ALTO - self.rect.height)
         self.velocidad_x = random.randint(3, 7)
 
@@ -103,3 +103,5 @@ class Enemigo(pygame.sprite.Sprite):
             self.rect.top = 0
         if self.rect.bottom > ALTO:
             self.rect.bottom = ALTO
+        if self.rect.right < 0:  # Si el enemigo sale por el borde izquierdo, se elimina
+            self.kill()
