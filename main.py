@@ -19,6 +19,37 @@ musica.reproducir_musica()
 # Inicializar el puntaje más alto
 puntaje_alto = 0
 
+def mostrar_pantalla_inicio(pantalla, fuente): 
+    pantalla.fill(NEGRO) 
+    texto_titulo = fuente.render("Siguiendo el Rastro", True, BLANCO) 
+    texto_instrucciones = fuente.render("Presiona cualquier tecla para empezar", True, BLANCO) 
+    pantalla.blit(texto_titulo, (ANCHO // 2 - texto_titulo.get_width() // 2, ALTO // 2 - 40)) 
+    pantalla.blit(texto_instrucciones, (ANCHO // 2 - texto_instrucciones.get_width() // 2, ALTO // 2)) 
+    pygame.display.flip() 
+
+    esperando_inicio = True 
+    while esperando_inicio: 
+        for evento in pygame.event.get(): 
+            if evento.type == pygame.QUIT: 
+                pygame.quit() 
+                exit() 
+            if evento.type == pygame.KEYDOWN: 
+                esperando_inicio = False
+
+def mostrar_instrucciones(pantalla, fuente): 
+    instrucciones = [ 
+        "Instrucciones:", 
+        "Usa las flechas arriba y abajo para moverte", 
+        "Presiona ESPACIO para disparar", 
+        "Presiona ESC para salir" 
+    ] 
+    pantalla.fill(NEGRO) 
+    for i, linea in enumerate(instrucciones): 
+        texto = fuente.render(linea, True, BLANCO) 
+        pantalla.blit(texto, (ANCHO // 2 - texto.get_width() // 2, ALTO // 2 - 60 + i * 30)) 
+    pygame.display.flip() 
+    pygame.time.wait(3000) # Esperar 3 segundos
+
 def mostrar_pantalla_game_over(pantalla, fuente, puntaje, puntaje_alto):
     # Actualizar el puntaje más alto si el puntaje actual es mayor
     if puntaje > puntaje_alto:
@@ -73,6 +104,12 @@ def main():
     reloj = pygame.time.Clock()
     puntaje = 0
     fuente = pygame.font.Font(None, 36)
+
+    # Mostrar pantalla de inicio 
+    mostrar_pantalla_inicio(pantalla, fuente)
+
+    #Mostrar instrucciones
+    mostrar_instrucciones(pantalla, fuente)
 
     # Cargar la imagen del fondo
     fondo = pygame.image.load("Siguiendo_El_Rastro_MarmoratoDemian_IvanRoman_2Parcial_UTN/sprites/bosque.jpg").convert()
