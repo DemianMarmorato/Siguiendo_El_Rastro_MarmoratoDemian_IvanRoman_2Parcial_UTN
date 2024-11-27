@@ -2,6 +2,13 @@ import pygame
 import random
 from config import ANCHO, ALTO, ROJO
 
+# Constantes para ajustar tamaños y velocidades
+JUGADOR_ANCHO = 170
+JUGADOR_ALTO = 170
+PROYECTIL_ANCHO = 50
+PROYECTIL_ALTO = 50
+ENEMIGO_ANCHO = 180
+ENEMIGO_ALTO = 180
 
 # Jugador
 class Jugador(pygame.sprite.Sprite):
@@ -17,15 +24,14 @@ class Jugador(pygame.sprite.Sprite):
         self.image = pygame.Surface((50, 50), pygame.SRCALPHA)
         self.image.blit(sprite_sheet, (0, 0), frame_rect)
 
-        # Escalar la imagen al tamaño deseado (por ejemplo, 180x180)
-        self.image = pygame.transform.scale(self.image, (170, 170))
+        # Escalar la imagen al tamaño deseado
+        self.image = pygame.transform.scale(self.image, (JUGADOR_ANCHO, JUGADOR_ALTO))
 
         # Ajustar el rectángulo de colisión al nuevo tamaño manualmente
         self.rect = self.image.get_rect()
-        self.rect.inflate_ip(
-            -140, -80
-        )  # Ajusta los valores para reducir el área de colisión
+        self.rect.inflate_ip(-140, -80)  # Ajusta los valores para reducir el área de colisión
 
+        # Posición inicial del jugador
         self.rect.left = 50
         self.rect.centery = ALTO // 2
         self.velocidad_y = 0
@@ -41,7 +47,6 @@ class Jugador(pygame.sprite.Sprite):
         if self.rect.right > ANCHO:
             self.rect.right = ANCHO
 
-
 # Proyectil
 class Proyectil(pygame.sprite.Sprite):
     def __init__(self, x, y):
@@ -50,9 +55,7 @@ class Proyectil(pygame.sprite.Sprite):
         self.image = pygame.image.load("Siguiendo_El_Rastro_MarmoratoDemian_IvanRoman_2Parcial_UTN/sprites/proyectil.png").convert_alpha()
 
         # Escalar la imagen del proyectil si es necesario
-        self.image = pygame.transform.scale(
-            self.image, (50, 50)
-        )  # Ajusta el tamaño según sea necesario
+        self.image = pygame.transform.scale(self.image, (PROYECTIL_ANCHO, PROYECTIL_ALTO))
 
         self.rect = self.image.get_rect()
         self.rect.left = x
@@ -64,7 +67,6 @@ class Proyectil(pygame.sprite.Sprite):
         self.rect.x += self.velocidad_x
         if self.rect.left > ANCHO:
             self.kill()
-
 
 # Enemigo
 class Enemigo(pygame.sprite.Sprite):
@@ -80,9 +82,7 @@ class Enemigo(pygame.sprite.Sprite):
         self.image = random.choice(imagenes_enemigos)
 
         # Escalar la imagen del enemigo al tamaño deseado
-        self.image = pygame.transform.scale(
-            self.image, (180, 180)
-        )  # Ajusta el tamaño según sea necesario
+        self.image = pygame.transform.scale(self.image, (ENEMIGO_ANCHO, ENEMIGO_ALTO))
 
         # Rotar la imagen horizontalmente para que mire hacia la izquierda
         self.image = pygame.transform.flip(self.image, True, False)

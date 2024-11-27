@@ -2,32 +2,50 @@ import pygame
 import random
 from config import ANCHO, ALTO, BLANCO, NEGRO, ROJO
 from sprites import Jugador, Proyectil, Enemigo
+from particulas import Particula
+import musica
 
 # Inicializar Pygame y Mixer 
 pygame.init() 
-pygame.mixer.init() 
 
 # Configuración de la pantalla 
 pantalla = pygame.display.set_mode((ANCHO, ALTO)) 
 pygame.display.set_caption("Siguiendo el Rastro") 
 
-#Cargar la música de fondo 
-pygame.mixer.music.load("Siguiendo_El_Rastro_MarmoratoDemian_IvanRoman_2Parcial_UTN/musica/temadeljuego.mp3") # Reemplaza "ruta_de_tu_musica.mp3" por el nombre de tu archivo de música 
-pygame.mixer.music.set_volume(0.5) # Opcional: Ajustar el volumen 
-pygame.mixer.music.play(-1) # -1 para que la música se repita indefinidamente
+# Cargar y reproducir la música de fondo 
+musica.cargar_musica(musica.musica_juego)
+musica.reproducir_musica()
 
-def mostrar_pantalla_game_over(pantalla, fuente, puntaje):
+# Inicializar el puntaje más alto
+puntaje_alto = 0
+
+def mostrar_pantalla_game_over(pantalla, fuente, puntaje, puntaje_alto):
+    # Actualizar el puntaje más alto si el puntaje actual es mayor
+    if puntaje > puntaje_alto:
+        puntaje_alto = puntaje
+
+    # Detener la música actual del juego 
+    musica.detener_musica()
+    # Reproducir la música de Game Over 
+    musica.cargar_musica(musica.musica_game_over) 
+    musica.reproducir_musica()
+
     pantalla.fill(NEGRO)
     texto_game_over = fuente.render(
         f"Juego Terminado. Puntaje: {puntaje}", True, BLANCO
     )
-    texto_rect = texto_game_over.get_rect(center=(ANCHO // 2, ALTO // 2 - 20))
+    texto_puntaje_alto = fuente.render(
+        f"Puntaje más alto: {puntaje_alto}", True, BLANCO
+    )
+    texto_rect = texto_game_over.get_rect(center=(ANCHO // 2, ALTO // 2 - 40))
+    texto_rect_alto = texto_puntaje_alto.get_rect(center=(ANCHO // 2, ALTO // 2))
     pantalla.blit(texto_game_over, texto_rect)
+    pantalla.blit(texto_puntaje_alto, texto_rect_alto)
 
     texto_reiniciar = fuente.render(
         "Presiona R para reiniciar la partida o ESC para salir", True, ROJO
     )
-    texto_rect_reiniciar = texto_reiniciar.get_rect(center=(ANCHO // 2, ALTO // 2 + 20))
+    texto_rect_reiniciar = texto_reiniciar.get_rect(center=(ANCHO // 2, ALTO // 2 + 40))
     pantalla.blit(texto_reiniciar, texto_rect_reiniciar)
 
     pygame.display.flip()
@@ -41,12 +59,17 @@ def mostrar_pantalla_game_over(pantalla, fuente, puntaje):
             if evento.type == pygame.KEYDOWN:
                 if evento.key == pygame.K_r:
                     esperando_reiniciar = False
+                    # Volver a la música del juego principal
+                    musica.detener_musica() 
+                    musica.cargar_musica(musica.musica_juego) 
+                    musica.reproducir_musica()
                 if evento.key == pygame.K_ESCAPE:
                     pygame.quit()
                     exit()
-
+    return puntaje_alto
 
 def main():
+    global puntaje_alto
     reloj = pygame.time.Clock()
     puntaje = 0
     fuente = pygame.font.Font(None, 36)
@@ -61,6 +84,7 @@ def main():
     todos_los_sprites = pygame.sprite.Group()
     proyectiles = pygame.sprite.Group()
     enemigos = pygame.sprite.Group()
+    particulas = pygame.sprite.Group()
 
     # Crear jugador
     jugador = Jugador()
@@ -85,6 +109,7 @@ def main():
                     proyectil = Proyectil(jugador.rect.right, jugador.rect.centery)
                     todos_los_sprites.add(proyectil)
                     proyectiles.add(proyectil)
+                    musica.reproducir_sonido(musica.sonido_disparo)
                 if evento.key == pygame.K_ESCAPE:
                     jugando = False
 
@@ -94,6 +119,7 @@ def main():
 
         # Actualizar
         todos_los_sprites.update()
+        particulas.update()
 
         # Desplazar el fondo
         fondo_x1 -= 2  # Ajusta la velocidad del fondo
@@ -113,12 +139,19 @@ def main():
 
         # Colisiones proyectil-enemigo
         colisiones = pygame.sprite.groupcollide(proyectiles, enemigos, True, True)
+        for colision in colisiones: 
+            musica.reproducir_sonido(musica.sonido_muerte_enemigo) # Reproducir el sonido cuando un enemigo es eliminado
+            for _ in range(20): # Generar 20 partículas por enemigo 
+                particula = Particula(colision.rect.centerx, colision.rect.centery) 
+                particulas.add(particula) 
+                todos_los_sprites.add(particula)
         puntaje += len(colisiones)
 
         # Colisiones jugador-enemigo
         choques = pygame.sprite.spritecollide(jugador, enemigos, False)
         if choques:
-            mostrar_pantalla_game_over(pantalla, fuente, puntaje)
+            musica.reproducir_sonido(musica.sonido_muerte_jugador)
+            puntaje_alto = mostrar_pantalla_game_over(pantalla, fuente, puntaje, puntaje_alto)
             jugando = True
             main()
 
@@ -136,7 +169,6 @@ def main():
         reloj.tick(60)
 
     pygame.quit()
-
 
 if __name__ == "__main__":
     main()
