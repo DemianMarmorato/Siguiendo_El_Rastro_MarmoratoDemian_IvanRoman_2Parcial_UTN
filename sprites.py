@@ -10,12 +10,13 @@ PROYECTIL_ALTO = 50
 ENEMIGO_ANCHO = 180
 ENEMIGO_ALTO = 180
 
+
 # Jugador
 class Jugador(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
         # Cargar el sprite sheet
-        sprite_sheet = pygame.image.load("Siguiendo_El_Rastro_MarmoratoDemian_IvanRoman_2Parcial_UTN/sprites/jugador.png").convert_alpha()
+        sprite_sheet = pygame.image.load("sprites/jugador.png").convert_alpha()
 
         # Definir el primer frame (x, y, ancho, alto)
         frame_rect = pygame.Rect(220, 50, 50, 50)
@@ -29,7 +30,9 @@ class Jugador(pygame.sprite.Sprite):
 
         # Ajustar el rectángulo de colisión al nuevo tamaño manualmente
         self.rect = self.image.get_rect()
-        self.rect.inflate_ip(-140, -80)  # Ajusta los valores para reducir el área de colisión
+        self.rect.inflate_ip(
+            -140, -80
+        )  # Ajusta los valores para reducir el área de colisión
 
         # Posición inicial del jugador
         self.rect.left = 50
@@ -47,15 +50,18 @@ class Jugador(pygame.sprite.Sprite):
         if self.rect.right > ANCHO:
             self.rect.right = ANCHO
 
+
 # Proyectil
 class Proyectil(pygame.sprite.Sprite):
     def __init__(self, x, y):
         super().__init__()
         # Cargar la imagen del sprite del proyectil
-        self.image = pygame.image.load("Siguiendo_El_Rastro_MarmoratoDemian_IvanRoman_2Parcial_UTN/sprites/proyectil.png").convert_alpha()
+        self.image = pygame.image.load("sprites/proyectil.png").convert_alpha()
 
         # Escalar la imagen del proyectil si es necesario
-        self.image = pygame.transform.scale(self.image, (PROYECTIL_ANCHO, PROYECTIL_ALTO))
+        self.image = pygame.transform.scale(
+            self.image, (PROYECTIL_ANCHO, PROYECTIL_ALTO)
+        )
 
         self.rect = self.image.get_rect()
         self.rect.left = x
@@ -68,14 +74,15 @@ class Proyectil(pygame.sprite.Sprite):
         if self.rect.left > ANCHO:
             self.kill()
 
+
 # Enemigo
 class Enemigo(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
         # Cargar las imágenes de los enemigos
         imagenes_enemigos = [
-            pygame.image.load("Siguiendo_El_Rastro_MarmoratoDemian_IvanRoman_2Parcial_UTN/sprites/enemigo1.png").convert_alpha(),
-            pygame.image.load("Siguiendo_El_Rastro_MarmoratoDemian_IvanRoman_2Parcial_UTN/sprites/enemigo2.png").convert_alpha(),
+            pygame.image.load("sprites/enemigo1.png").convert_alpha(),
+            pygame.image.load("sprites/enemigo2.png").convert_alpha(),
         ]
 
         # Seleccionar aleatoriamente una imagen de enemigo
