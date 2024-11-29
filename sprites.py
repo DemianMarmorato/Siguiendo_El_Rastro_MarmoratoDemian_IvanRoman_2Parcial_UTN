@@ -97,7 +97,7 @@ class Enemigo(pygame.sprite.Sprite):
 
         self.rect = self.image.get_rect()
         self.rect.right = ANCHO
-        self.rect.inflate_ip(-100, -50)  # Ajustar área de colisión del enemigo
+        self.rect.inflate_ip(-100, -30)  # Ajustar área de colisión del enemigo
         self.rect.y = random.randint(0, ALTO - self.rect.height)
         self.velocidad_x = random.randint(3, 7)
 

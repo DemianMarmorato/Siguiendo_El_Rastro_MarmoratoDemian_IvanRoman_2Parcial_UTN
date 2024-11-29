@@ -5,7 +5,7 @@ from sprites import Jugador, Proyectil, Enemigo
 from particulas import Particula
 import musica
 
-# Inicializar Pygame y Mixer
+# Inicializar Pygame
 pygame.init()
 
 # Configuración de la pantalla
@@ -65,7 +65,7 @@ def mostrar_instrucciones(pantalla, fuente):
             texto, (ANCHO // 2 - texto.get_width() // 2, ALTO // 2 - 60 + i * 30)
         )
     pygame.display.flip()
-    pygame.time.wait(3000)  # Esperar 3 segundos
+    pygame.time.wait(2000)  # Esperar 2 segundos
 
 
 def mostrar_pantalla_game_over(pantalla, fuente, puntaje, puntaje_alto):
