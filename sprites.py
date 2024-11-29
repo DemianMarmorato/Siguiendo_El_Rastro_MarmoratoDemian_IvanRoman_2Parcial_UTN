@@ -15,20 +15,20 @@ ENEMIGO_ALTO = 180
 class Jugador(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
-        # Cargar el sprite sheet
+        # Cargar el sprite sheet del jugador
         sprite_sheet = pygame.image.load("sprites/jugador.png").convert_alpha()
 
-        # Definir el primer frame (x, y, ancho, alto)
+        # Definir el primer frame del sprite (x, y, ancho, alto)
         frame_rect = pygame.Rect(220, 50, 50, 50)
 
-        # Crear una superficie nueva para el frame específico
+        # Crear una superficie nueva para el frame específico del jugador
         self.image = pygame.Surface((50, 50), pygame.SRCALPHA)
         self.image.blit(sprite_sheet, (0, 0), frame_rect)
 
-        # Escalar la imagen al tamaño deseado
+        # Escalar la imagen del jugador al tamaño deseado
         self.image = pygame.transform.scale(self.image, (JUGADOR_ANCHO, JUGADOR_ALTO))
 
-        # Ajustar el rectángulo de colisión al nuevo tamaño manualmente
+        # Ajustar manualmente el rectángulo de colisión al nuevo tamaño
         self.rect = self.image.get_rect()
         self.rect.inflate_ip(
             -140, -80
@@ -41,6 +41,7 @@ class Jugador(pygame.sprite.Sprite):
 
     def update(self):
         self.rect.y += self.velocidad_y
+        # Limitar el movimiento del jugador dentro de la pantalla
         if self.rect.top < 0:
             self.rect.top = 0
         if self.rect.bottom > ALTO:
@@ -67,12 +68,12 @@ class Proyectil(pygame.sprite.Sprite):
         self.rect.left = x
         self.rect.centery = y
         self.velocidad_x = 10
-        self.rect.inflate_ip(-35, -35)
+        self.rect.inflate_ip(-35, -35)  # Ajustar área de colisión del proyectil
 
     def update(self):
         self.rect.x += self.velocidad_x
         if self.rect.left > ANCHO:
-            self.kill()
+            self.kill()  # Eliminar el proyectil si sale de la pantalla
 
 
 # Enemigo
@@ -96,19 +97,20 @@ class Enemigo(pygame.sprite.Sprite):
 
         self.rect = self.image.get_rect()
         self.rect.right = ANCHO
-        self.rect.inflate_ip(-100, -30)
+        self.rect.inflate_ip(-100, -50)  # Ajustar área de colisión del enemigo
         self.rect.y = random.randint(0, ALTO - self.rect.height)
         self.velocidad_x = random.randint(3, 7)
 
     def update(self):
         self.rect.x -= self.velocidad_x
         if self.rect.left < 0:
-            self.kill()
+            self.kill()  # Eliminar el enemigo si sale por el borde izquierdo de la pantalla
+        # Limitar movimiento del enemigo dentro de la pantalla
         if self.rect.right > ANCHO:
             self.rect.right = ANCHO
         if self.rect.top < 0:
             self.rect.top = 0
         if self.rect.bottom > ALTO:
             self.rect.bottom = ALTO
-        if self.rect.right < 0:  # Si el enemigo sale por el borde izquierdo, se elimina
+        if self.rect.right < 0:
             self.kill()

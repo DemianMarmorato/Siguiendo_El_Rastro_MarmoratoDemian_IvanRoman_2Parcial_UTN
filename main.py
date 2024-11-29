@@ -21,6 +21,9 @@ puntaje_alto = 0
 
 
 def mostrar_pantalla_inicio(pantalla, fuente):
+    """
+    Función para mostrar la pantalla de inicio del juego.
+    """
     pantalla.fill(NEGRO)
     texto_titulo = fuente.render("Siguiendo el Rastro", True, BLANCO)
     texto_instrucciones = fuente.render(
@@ -46,6 +49,9 @@ def mostrar_pantalla_inicio(pantalla, fuente):
 
 
 def mostrar_instrucciones(pantalla, fuente):
+    """
+    Función para mostrar las instrucciones del juego.
+    """
     instrucciones = [
         "Instrucciones:",
         "Usa las flechas arriba y abajo para moverte",
@@ -63,6 +69,9 @@ def mostrar_instrucciones(pantalla, fuente):
 
 
 def mostrar_pantalla_game_over(pantalla, fuente, puntaje, puntaje_alto):
+    """
+    Función para mostrar la pantalla de Game Over y manejar la lógica de reinicio.
+    """
     # Actualizar el puntaje más alto si el puntaje actual es mayor
     if puntaje > puntaje_alto:
         puntaje_alto = puntaje
@@ -113,6 +122,9 @@ def mostrar_pantalla_game_over(pantalla, fuente, puntaje, puntaje_alto):
 
 
 def main():
+    """
+    Función principal que inicia y controla el flujo del juego.
+    """
     global puntaje_alto
     reloj = pygame.time.Clock()
     puntaje = 0
